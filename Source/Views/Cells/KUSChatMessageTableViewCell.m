@@ -64,7 +64,7 @@ static const CGFloat kTimestampTopPadding = 4.0;
     if (self == [KUSChatMessageTableViewCell class]) {
         KUSChatMessageTableViewCell *appearance = [KUSChatMessageTableViewCell appearance];
       //  [appearance setTextFont:[UIFont systemFontOfSize:14.0]];
-        [appearance setTextFont:[UIFont fontWithName:"CircularPro-Book" size:14.0]];
+        [appearance setTextFont:[UIFont fontWithName:@"CircularPro-Book" size:14.0]];
         [appearance setUserBubbleColor:[KUSColor blueColor]];
         [appearance setCompanyBubbleColor:[KUSColor lightGrayColor]];
         [appearance setUserTextColor:[UIColor whiteColor]];
