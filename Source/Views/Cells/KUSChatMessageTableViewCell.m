@@ -131,7 +131,7 @@ static const CGFloat kTimestampTopPadding = 4.0;
 {
     CGFloat actualMaxWidth = MIN(kMaxBubbleWidth - kBubbleSidePadding * 2.0, maxWidth);
 
-    NSAttributedString *attributedString = [KUSText attributedStringFromText:text fontSize:[self fontSize]];
+    NSAttributedString *attributedString = [KUSText attributedStringFromText:text fontSize:[self fontSize]+0.5];
 
     CGSize maxSize = CGSizeMake(actualMaxWidth, 1000.0);
     CGRect boundingRect = [attributedString boundingRectWithSize:maxSize
