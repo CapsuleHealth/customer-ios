@@ -107,7 +107,8 @@ static const CGFloat kTimestampTopPadding = 4.0;
 + (UIFont *)messageFont
 {
     KUSChatMessageTableViewCell *appearance = [KUSChatMessageTableViewCell appearance];
-    return [appearance textFont];
+    return [UIFont fontWithName:@"CircularPro-Book" size:14.0];
+   // return [appearance textFont];
 }
 
 + (CGSize)boundingSizeForMessage:(KUSChatMessage *)message maxWidth:(CGFloat)maxWidth
