@@ -22,6 +22,7 @@
     NSDictionary<NSString *, NSObject *> *_pendingCustomChatSessionAttributes;
     NSDictionary<NSString *, NSObject *> *_pendingCustomChatSessionAttributesForNextConversation;
     NSMutableDictionary<NSString *, NSDate *> *_localLastSeenAtBySessionId;
+    BOOL _isNewSession;
 }
 
 @end
@@ -56,7 +57,21 @@
 
 - (NSURL *)firstURL
 {
-    return [self.userSession.requestManager URLForEndpoint:@"/c/v1/chat/sessions"];
+    return [self.userSession.requestManager URLForEndpoint:[self _getSessionsUrl]];
+}
+
+- (NSString *) _getSessionsUrl {
+    
+    NSString *url = @"/c/v1/chat/sessions";
+    if (self.userSession.chatSettingsDataSource.didFetch) {
+        
+        KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
+        if(chatSettings.noHistory) {
+            //Only fetch active sessions when no history is enabled
+            url = [NSString stringWithFormat:@"%@?active=true", url];
+        }
+    }
+    return url;
 }
 
 - (Class)modelClass
@@ -101,7 +116,7 @@
     __weak KUSChatSessionsDataSource *weakSelf = self;
     [self.userSession.requestManager
      performRequestType:KUSRequestTypePost
-     endpoint:@"/c/v1/chat/sessions"
+     endpoint:[self _getSessionsUrl]
      params:@{ @"title": title }
      authenticated:YES
      completion:^(NSError *error, NSDictionary *response) {
@@ -179,7 +194,7 @@
     [_localLastSeenAtBySessionId setObject:[NSDate date] forKey:sessionId];
 }
 
-- (void)submitFormMessages:(NSArray<NSDictionary *> *)messages
+- (void)submitFormWithParams:(NSArray<NSDictionary *> *)params
                     formId:(NSString *)formId
                 completion:(void (^)(NSError *, KUSChatSession *, NSArray<KUSChatMessage *> *))completion
 {
@@ -187,7 +202,7 @@
     [self.userSession.requestManager
      performRequestType:KUSRequestTypePost
      endpoint:[NSString stringWithFormat:@"/c/v1/chat/forms/%@/responses", formId]
-     params:@{ @"messages": messages }
+     params:params
      authenticated:YES
      completion:^(NSError *error, NSDictionary *response) {
          if (error) {
@@ -273,6 +288,24 @@
 - (void)setMessageToCreateNewChatSession:(NSString *)messageToCreateNewChatSession
 {
     _messageToCreateNewChatSession = [messageToCreateNewChatSession copy];
+}
+
+- (void)setFormIdForConversationalForm:(NSString *)formIdForConversationalForm
+{
+    _formIdForConversationalForm = [formIdForConversationalForm copy];
+}
+
+- (BOOL)didFetch
+{
+    if (_isNewSession) {
+        return YES;
+    }
+    return [super didFetch];
+}
+
+- (void)markSessionAsNew
+{
+    _isNewSession = YES;
 }
 
 #pragma mark - Internal methods

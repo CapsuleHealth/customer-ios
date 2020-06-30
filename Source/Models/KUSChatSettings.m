@@ -30,11 +30,13 @@
         _greeting = NSStringFromKeyPath(json, @"attributes.greeting");
         _activeFormId = NSStringFromKeyPath(json, @"attributes.activeForm");
         _pusherAccessKey = NSStringFromKeyPath(json, @"attributes.pusherAccessKey");
+        _pusherCluster = NSStringFromKeyPath(json, @"attributes.pusherCluster");
         _enabled = BOOLFromKeyPath(json, @"attributes.enabled");
         _closableChat = BOOLFromKeyPath(json, @"attributes.closableChat");
         _waitMessage = NSStringFromKeyPath(json, @"attributes.waitMessage");
         _singleSessionChat = BOOLFromKeyPath(json, @"attributes.singleSessionChat");
         _noHistory = BOOLFromKeyPath(json, @"attributes.noHistory");
+        _campaignsEnabled = BOOLFromKeyPath(json, @"attributes.campaignsEnabled");
         
         _customWaitMessage = NSStringFromKeyPath(json, @"attributes.volumeControl.customWaitMessage");
         _timeOut = IntegerFromKeyPath(json, @"attributes.volumeControl.timeout");
@@ -54,6 +56,9 @@
         
         _shouldShowTypingIndicatorCustomerWeb = BOOLFromKeyPath(json, @"attributes.showTypingIndicatorCustomerWeb");
         _shouldShowTypingIndicatorWeb = BOOLFromKeyPath(json, @"attributes.showTypingIndicatorWeb");
+      
+        _inboundMessagesOverride = BOOLFromKeyPath(json, @"attributes.csat.data.inboundMessagesOverride");
+        _outboundMessagesOverride = BOOLFromKeyPath(json, @"attributes.csat.data.outboundMessagesOverride");
     }
     return self;
 }

@@ -16,7 +16,9 @@ typedef NS_ENUM(NSInteger, KUSChatMessageDirection) {
 
 typedef NS_ENUM(NSInteger, KUSChatMessageType) {
     KUSChatMessageTypeText,
-    KUSChatMessageTypeImage
+    KUSChatMessageTypeImage,
+    KUSChatMessageTypeAttachment,
+    KUSChatMessageTypeArticle
 };
 
 typedef NS_ENUM(NSInteger, KUSChatMessageState) {
@@ -40,9 +42,20 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, readonly, nullable) NSString *sentById;
 @property (nonatomic, copy, readonly, nullable) NSString *campaignId;
 
-@property (nonatomic, assign, readonly) KUSChatMessageType type;
+@property (nonatomic, assign, readwrite) KUSChatMessageType type;
 @property (nonatomic, assign, readwrite) KUSChatMessageState state;
 @property (nonatomic, copy, readwrite, nullable) NSString *value;
+
+@property (nonatomic, copy, readwrite) NSString *attachmentFileName;
+@property (nonatomic, copy, readwrite) NSString *displayAttachmentFileName;
+@property (nonatomic, copy, readwrite) NSString *attachmentContentLength;
+@property (nonatomic, copy, readwrite) NSString *attachmentMIMEType;
+@property (atomic, readwrite) Boolean *isVerifiedAnImage;
+@property (atomic, readwrite) Boolean *isVerifiedAnAttachment;
+
+@property (atomic, readwrite) NSMutableDictionary* kbArticle;
+
+- (NSString *)displayAttachmentSize;
 
 + (NSURL *)attachmentURLForMessageId:(NSString *)messageId attachmentId:(NSString *)attachmentId;
 

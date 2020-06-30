@@ -23,13 +23,14 @@ static const NSTimeInterval KUSShouldConnectToPusherRecencyThreshold = 60.0;
 static const NSTimeInterval KUSLazyPollingTimerInterval = 30.0;
 static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 
-@interface KUSPushClient () <KUSObjectDataSourceListener, KUSPaginatedDataSourceListener, PTPusherDelegate, KUSChatMessagesDataSourceListener> {
+@interface KUSPushClient () <KUSObjectDataSourceListener, KUSPaginatedDataSourceListener, PTPusherDelegate, KUSChatMessagesDataSourceListener,PTPusherPresenceChannelDelegate> {
     __weak KUSUserSession *_userSession;
 
     KUSTimer *_pollingTimer;
     PTPusher *_pusherClient;
     PTPusherChannel *_pusherChannel;
     PTPusherPrivateChannel *_chatActivityChannel;
+    PTPusherPresenceChannel *_customerPresenceChannel;
 
     NSMutableDictionary<NSString *, KUSChatSession *> *_previousChatSessions;
     NSString *_pendingNotificationSessionId;
@@ -91,13 +92,22 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     return [NSString stringWithFormat:@"private-external-%@-chat-activity-%@", _userSession.orgId, sessionId];
 }
 
+- (NSString *)_presenceChannelNameForCustomerId:(NSString *)customerId
+{
+    return [NSString stringWithFormat:@"external-%@-customer-activity-%@", _userSession.orgId, customerId];
+}
+
 #pragma mark - Internal methods
 
 - (void)_connectToChannelsIfNecessary
 {
     KUSChatSettings *chatSettings = _userSession.chatSettingsDataSource.object;
     if (_pusherClient == nil && chatSettings.pusherAccessKey) {
-        _pusherClient = [PTPusher pusherWithKey:chatSettings.pusherAccessKey delegate:self encrypted:YES];
+        if(chatSettings.pusherCluster.length > 0){
+            _pusherClient = [PTPusher pusherWithKey:chatSettings.pusherAccessKey delegate:self encrypted:YES cluster:chatSettings.pusherCluster];
+        }else{
+            _pusherClient = [PTPusher pusherWithKey:chatSettings.pusherAccessKey delegate:self encrypted:YES];
+        }
         _pusherClient.authorizationURL = [self _pusherAuthURL];
     }
     
@@ -108,17 +118,25 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     if (!_isPusherTrackingStarted) {
         _isPusherTrackingStarted = YES;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(KUSShouldConnectToPusherRecencyThreshold * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+           
             _isPusherTrackingStarted = NO;
-            
-            [_userSession.statsManager updateStats:^(BOOL sessionUpdated) {
-                // Get latest session on update to avoid packet loss during socket connection
-                if (sessionUpdated) {
-                    _didPusherLossPackets = YES;
-                    [_userSession.chatSessionsDataSource fetchLatest];
-                }
+            BOOL isPusherConnected = _pusherClient && _pusherClient.connection.isConnected;
+            if(!isPusherConnected) {
                 
-                [self _connectToChannelsIfNecessary];
-            }];
+                KUSLogPusher("Pusher Not connected");
+                [_userSession.statsManager updateStats:^(BOOL sessionUpdated) {
+                    // Get latest session on update to avoid packet loss during socket connection
+                    if (sessionUpdated) {
+                        _didPusherLossPackets = YES;
+                        [_userSession.chatSessionsDataSource fetchLatest];
+                    }
+                    
+                    [self _connectToChannelsIfNecessary];
+                }];
+            }else{
+                KUSLogPusher("Pusher is connected");
+            }
+            
         });
     }
     
@@ -175,6 +193,7 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
 
 - (void)_onPollTick
 {
+    KUSLogPusher(@"Poll Tick called");
     [_userSession.statsManager updateStats:^(BOOL sessionUpdated) {
         // Get latest session on update
         if (sessionUpdated) {
@@ -315,6 +334,26 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     
     [_chatActivityChannel triggerEventNamed:@"client-kustomer.app.chat.activity.typing"
                                        data:activityData];
+}
+
+- (void)connectToCustomerPresenceChannel:(NSString *)customerId
+{
+    if(nil == _customerPresenceChannel) {
+        
+        NSString *presenceChannelName = [self _presenceChannelNameForCustomerId:customerId];
+        KUSLogPusher(@"Connecting to presence channel %@",presenceChannelName);
+        _customerPresenceChannel = (PTPusherPresenceChannel *) [_pusherClient subscribeToPresenceChannelNamed:presenceChannelName];
+    }
+    
+}
+
+- (void)disconnectFromCustomerPresenceChannel
+{
+    if (_customerPresenceChannel) {
+        KUSLogPusher(@"Disconnecting from presence channel");
+        [_customerPresenceChannel unsubscribe];
+        _customerPresenceChannel = nil;
+    }
 }
 
 #pragma mark - Property methods
@@ -500,6 +539,10 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     KUSLogPusher(@"Pusher connection did connect");
 
     [self _updatePollingTimer];
+    
+    if(_didPusherLossPackets){
+        [self _onPollTick];
+    }
 }
 
 - (void)pusher:(PTPusher *)pusher connection:(PTPusherConnection *)connection didDisconnectWithError:(NSError *)error willAttemptReconnect:(BOOL)willAttemptReconnect
@@ -507,10 +550,11 @@ static const NSTimeInterval KUSActivePollingTimerInterval = 7.5;
     if (error) {
         KUSLogPusherError(@"Pusher connection did disconnect with error: %@", error);
     } else {
-        KUSLogPusher(@"Pusher connection did disconnect");
+        KUSLogPusher(@"Pusher connection did disconnect and willAttemptReconnect: %d",willAttemptReconnect);
     }
 
     [self _updatePollingTimer];
+    _didPusherLossPackets = YES;
 }
 
 - (void)pusher:(PTPusher *)pusher connection:(PTPusherConnection *)connection failedWithError:(NSError *)error
@@ -544,6 +588,20 @@ withAuthOperation:(PTPusherChannelAuthorizationOperation *)operation
     KUSLogPusherError(@"Pusher did fail to subscribe to channel: %@ with error: %@", channel.name, error);
     
     [self _updatePollingTimer];
+}
+
+#pragma mark PTPusherPresenceChannelDelegate methods
+
+- (void)presenceChannelDidSubscribe:(PTPusherPresenceChannel *)channel {
+    KUSLogPusher(@"presenceChannelDidSubscribe %@",channel);
+}
+
+- (void)presenceChannel:(PTPusherPresenceChannel *)channel memberAdded:(PTPusherChannelMember *)member {
+    KUSLogPusher(@"presenceChannel memberAdded %@ - member %@",channel,member.userInfo);
+}
+
+- (void)presenceChannel:(PTPusherPresenceChannel *)channel memberRemoved:(PTPusherChannelMember *)member{
+    KUSLogPusher(@"presenceChannel memberRemoved %@ - member %@",channel,member.userInfo);
 }
 
 @end

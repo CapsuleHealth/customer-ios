@@ -16,12 +16,13 @@
 @interface KUSChatSessionsDataSource : KUSPaginatedDataSource
 
 @property (nonatomic, copy) NSString *messageToCreateNewChatSession;
+@property (nonatomic, copy) NSString *formIdForConversationalForm;
 
 - (void)upsertNewSessions:(NSArray<KUSChatSession *> *)chatSessions;
 - (void)createSessionWithTitle:(NSString *)title completion:(void(^)(NSError *error, KUSChatSession *session))completion;
 - (void)updateLastSeenAtForSessionId:(NSString *)sessionId completion:(void(^)(NSError *error, KUSChatSession *session))completion;
 - (void)updateLocallyLastSeenAtForSessionId:(NSString *)sessionId;
-- (void)submitFormMessages:(NSArray<NSDictionary *> *)messages
+- (void)submitFormWithParams:(NSArray<NSDictionary *> *)params
                     formId:(NSString *)formId
                 completion:(void(^)(NSError *error, KUSChatSession *session, NSArray<KUSChatMessage *> *messages))completion;
 
@@ -49,5 +50,11 @@
 
 // Returns the total open pro-active campaign sessions count
 - (NSUInteger)openProactiveCampaignsCount;
+
+// Returns whether Sessions data was fetched
+- (BOOL)didFetch;
+
+// Mark the current session as new for a new user
+- (void)markSessionAsNew;
 
 @end

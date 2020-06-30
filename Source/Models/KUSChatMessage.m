@@ -7,7 +7,7 @@
 //
 
 #import "KUSChatMessage.h"
-
+#import <Foundation/Foundation.h>
 #import "KUSUserSession.h"
 #import "Kustomer_Private.h"
 #import "KUSLocalization.h"
@@ -71,7 +71,7 @@ static NSString *KUSUnescapeBackslashesFromString(NSString *string)
 
     NSMutableArray<KUSChatMessage *> *chatMessages = [[NSMutableArray alloc] init];
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:imagePattern options:kNilOptions error:NULL];
-
+    
     __block NSUInteger lastId = 0;
     __block NSUInteger lastLocation = 0;
 
@@ -165,6 +165,7 @@ static NSString *KUSUnescapeBackslashesFromString(NSString *string)
         _direction = KUSChatMessageDirectionFromString(NSStringFromKeyPath(json, @"attributes.direction"));
         _sentById = NSStringFromKeyPath(json, @"relationships.sentBy.data.id");
         _campaignId = NSStringFromKeyPath(json, @"relationships.campaign.data.id");
+        _kbArticle = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -219,6 +220,21 @@ static NSString *KUSUnescapeBackslashesFromString(NSString *string)
     }
 
     return YES;
+}
+
+- (NSString *)displayAttachmentSize
+{
+  // NSCharacterSet* nonNumbers = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+  // NSRange r = [_attachmentContentLength rangeOfCharacterFromSet: nonNumbers];
+  // BOOL isAllDigits = r.location == NSNotFound;
+  
+  BOOL isAllDigits = YES;
+  
+  if(isAllDigits){
+    return [NSByteCountFormatter stringFromByteCount:_attachmentContentLength.longLongValue countStyle:NSByteCountFormatterCountStyleFile];
+  }else{
+    return @"";
+  }
 }
 
 @end

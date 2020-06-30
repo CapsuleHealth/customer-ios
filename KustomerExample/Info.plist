@@ -15,7 +15,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -27,6 +27,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>to attach a photo from your camera</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>to save a photo to your library</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>to attach a photo from your library</string>
 	<key>UILaunchStoryboardName</key>
@@ -35,6 +37,8 @@
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>to be able tor record a video and attach it</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

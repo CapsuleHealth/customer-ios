@@ -1,4 +1,71 @@
-# Changelog for Kustomer iOS SDK'
+# Changelog for Kustomer iOS SDK
+
+
+## 0.3.6
+Release Date: 06/10/2020
+
+* Fixed pre iOS 13 incompatibility
+
+## 0.3.5
+Release Date: 05/11/2020
+
+* Added support for CSAT inbound and outbound message requirement overrides
+
+## 0.3.4
+Release Date: 04/21/2020
+
+* Added Form KB Deflect Functionality
+* Added Auto Start for Chat Assisstant
+
+## 0.3.3
+
+Release Date: 03/06/2020
+
+* Support Additional Pusher "Clusters"
+* Better time zone support for business schedules in time zones other than the user's local time zone
+* Upload videos from iOS
+* View and download attachments from Kustomer web - PDF, MS Word, text, Excel, zip, and videos
+* Bug fix: conversational assistant form override ID is now enabled
+* Bug fix: If dark mode is enabled, background of chat screen defaults to white
+* Bug fix: Survey question comments limited to 1024 characters
+* Bug fix: Waiting label now shown even when volume control is disabled
+* Bug fix: Ability to set custom color for CSAT introduction text
+
+
+## 0.3.2
+
+Release Date: 01/27/2019
+
+* Re initializing chat when identify API is called
+* Added functionality in isChatAvailable API to Check if chat is within Business Hours and outside of Holidays along with Chat settings enabled
+* Added introduction message to satisfaction surveys
+* Updated font and centered satisfaction rating title, introduction message, and follow-up question
+
+## 0.3.1
+
+Release Date: 11/22/2019
+
+* Hiding waiting label when Chat is disabled, or when Agent has replied in a conversation
+* Updated message font to system font
+* Minor bug fixed to in satisfaction survey form
+
+## 0.3.0
+
+Release Date: 11/08/2019
+
+* Removed stats call when pusher is connected
+* Chat initialization improvements
+* Removed frequent calls to sessions and messages
+* Fixed messages truncation issue for large messages
+
+## 0.2.4
+
+Release Date: 10/09/2019
+
+* You can now check business hours
+* Wrap chat Greeting text and Waiting text to multiple lines without truncation. 
+* Updated SDWebImage library version to 5.2.2
+* Removed SpinKit Library from pod file
 
 ## 0.2.3.6
 Release Date: 06/28/2019
