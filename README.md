@@ -1,3 +1,17 @@
+# Capsule Fork
+
+This repository is a fork of the official Kustomer iOS SDK Github repository.
+
+## Changes made so far
+
+* Added a set of custom fonts (see in the Fonts folder)
+* Updated the default font to use (SHA 5626182d2afc6d34009e0a81dbc6861336b5e0bd)
+* Added +0.5 to sizer for measuring size of speech bubble (SHA c554f27c5a2b715a3522a0dbae7d61dbce2a15b4)
+* Added support for a notification banner asking the user to turn on push notifications (SHA e80f0eaa1c0641e30ffd7f635cd449551f9d8ac6)
+* Updated the API to return the error object from the identify call (SHA d885a513d2585a2123525357d1579592a0dec241)
+
+----------------
+
 <p align="center" >
   <img src="Assets/kustomer_logo.png" title="Kustomer logo" float=left>
 </p>
