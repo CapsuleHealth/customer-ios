@@ -241,8 +241,12 @@
 {
     [super viewDidAppear:animated];
 
+    // Capsule
+    // Change to Kustomer's default behavior: we want to keyboard to be presented only when the chat is being presented
+    // To avoid showing the keyboard when opening the chat tab.
     // Only bring up the keyboard if the chat is being presented/pushed
-    if (self.isBeingPresented || self.isMovingToParentViewController) {
+    //    if (self.isBeingPresented || self.isMovingToParentViewController) {
+    if (self.isBeingPresented) {
         if (!_inputBarView.hidden && !_showNonBusinessHoursImage) {
             [_inputBarView becomeFirstResponder];
         }
