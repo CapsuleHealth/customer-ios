@@ -80,7 +80,7 @@
 @property (nonatomic, strong) KUSNewSessionButton *sessionButton;
 @property (nonatomic, strong) KUSMLFormValuesPickerView *mlFormValuesPickerView;
 @property (nonatomic, strong) NYTPhotoViewerArrayDataSource *nytPhotosDataSource;
-
+@property (nonatomic, strong) UIView *notificationsBanner;
 
 @end
 
@@ -141,25 +141,26 @@
 
     self.view.backgroundColor = [UIColor whiteColor];
     self.edgesForExtendedLayout = UIRectEdgeTop;
-    
+
     CGFloat notificationBannerHeight = 0;
+    self.notificationsBanner = (UIView*)[[UINib nibWithNibName:@"PushNotificationsBanner" bundle:[NSBundle bundleForClass:[self class]]] instantiateWithOwner:self options:nil][0];
+    [self.notificationsBanner setFrame:CGRectMake(0, 0, self.view.frame.size.width, notificationBannerHeight)];
+    [self.notificationsBanner setTranslatesAutoresizingMaskIntoConstraints:false];
+    [self.view addSubview:self.notificationsBanner];
+    if (@available(iOS 11.0, *)) {
+        [[self.notificationsBanner.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor] setActive:true];
+    } else {
+        [[self.notificationsBanner.topAnchor constraintEqualToAnchor:self.view.topAnchor] setActive:true];
+    }
+    [[self.notificationsBanner.leftAnchor constraintEqualToAnchor:self.view.leftAnchor] setActive:true];
+    [[self.notificationsBanner.rightAnchor constraintEqualToAnchor:self.view.rightAnchor] setActive:true];
+    [self.notificationsBanner setHidden:YES];
     if ([Kustomer shouldShowNotificationBanner]) {
         notificationBannerHeight = 66;
+        [self.notificationsBanner setHidden:NO];
     }
-    
-    UIView *notificationsBanner = (UIView*)[[UINib nibWithNibName:@"PushNotificationsBanner" bundle:[NSBundle bundleForClass:[self class]]] instantiateWithOwner:self options:nil][0];
-    [notificationsBanner setFrame:CGRectMake(0, 0, self.view.frame.size.width, notificationBannerHeight)];
-    [notificationsBanner setTranslatesAutoresizingMaskIntoConstraints:false];
-    [self.view addSubview:notificationsBanner];
-    notificationBannerHeightConstraint = [notificationsBanner.heightAnchor constraintEqualToConstant:notificationBannerHeight];
     [notificationBannerHeightConstraint setActive:true];
-    if (@available(iOS 11.0, *)) {
-        [[notificationsBanner.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor] setActive:true];
-    } else {
-        [[notificationsBanner.topAnchor constraintEqualToAnchor:self.view.topAnchor] setActive:true];
-    }
-    [[notificationsBanner.leftAnchor constraintEqualToAnchor:self.view.leftAnchor] setActive:true];
-    [[notificationsBanner.rightAnchor constraintEqualToAnchor:self.view.rightAnchor] setActive:true];
+    notificationBannerHeightConstraint = [self.notificationsBanner.heightAnchor constraintEqualToConstant:notificationBannerHeight];
 
     self.tableView = [[KUSChatTableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     [self.tableView setTranslatesAutoresizingMaskIntoConstraints:false];
@@ -169,8 +170,8 @@
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     self.tableView.transform = CGAffineTransformMakeScale(1.0, -1.0);
     [self.view addSubview:self.tableView];
-    [[self.tableView.topAnchor constraintEqualToAnchor:notificationsBanner.bottomAnchor] setActive:true];
-    [[notificationsBanner.bottomAnchor constraintEqualToAnchor:self.tableView.topAnchor] setActive:true];
+    [[self.tableView.topAnchor constraintEqualToAnchor:self.notificationsBanner.bottomAnchor] setActive:true];
+    [[self.notificationsBanner.bottomAnchor constraintEqualToAnchor:self.tableView.topAnchor] setActive:true];
     [[self.tableView.leftAnchor constraintEqualToAnchor:self.view.leftAnchor] setActive:true];
     [[self.tableView.rightAnchor constraintEqualToAnchor:self.view.rightAnchor] setActive:true];
 
@@ -229,6 +230,12 @@
                                                      name:notificationName
                                                    object:nil];
     }
+
+    // Capsule
+    // Add a tap gesture recognizer to the view to dismiss the keyboard
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_hideKeyboard)];
+    tapGesture.cancelsTouchesInView = NO;
+    [self.tableView addGestureRecognizer:tapGesture];
 
     [self _checkShouldUpdateInputView];
 
@@ -322,7 +329,6 @@
     BOOL isIphone = [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone;
     BOOL isLandscape = UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation);
 
-    
     // Update table view frame if "Start New Conversation" is hidden
     KUSChatSession *session = [_userSession.chatSessionsDataSource objectWithId:[self getValidChatSessionId]];
     BOOL shouldHideStartNewConversation = session.lockedAt && _userSession.userDefaults.shouldHideNewConversationButtonInClosedChat;
@@ -344,6 +350,7 @@
 }
 - (IBAction)handleEnableNotificationsTapped:(id)sender {
     [notificationBannerHeightConstraint setConstant:0];
+    [self.notificationsBanner setHidden:YES];
     [UIView animateWithDuration:0.25 animations:^{
         [self.view layoutIfNeeded];
     }];
@@ -357,7 +364,13 @@
     return [_chatSessionId isEqual:kKUSTempSessionId] ? nil : _chatSessionId;
 }
 
-
+// Capsule
+// Handles dismissing the keyboard
+- (void)_hideKeyboard {
+    if ([self.inputBarView isFirstResponder]) {
+        [self.inputBarView resignFirstResponder];
+    }
+}
 
 - (void)_showMLFormValuePickerWithValue:(KUSMLFormValue *)mlFormValue
 {
