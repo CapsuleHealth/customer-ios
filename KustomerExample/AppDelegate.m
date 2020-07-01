@@ -17,8 +17,8 @@
 #import "KUSChatMessageTableViewCell.h"
 
 
-#error A valid API key is required
-static NSString *const kKustomerAPIKey = @"API_KEY";
+//#error A valid API key is required
+static NSString *const kKustomerAPIKey = @"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjMzRiZGU4MTVkNDQxMDA5NGI5OGNlNiIsInVzZXIiOiI1YzM0YmRlODk1NWMyMjAwMTI1N2EzZGUiLCJvcmciOiI1YzJmZTcyMzgyZmViNzAwMTkwOWIxYzIiLCJvcmdOYW1lIjoiY2Fwc3VsZS1zYW5kYm94IiwidXNlclR5cGUiOiJtYWNoaW5lIiwicm9sZXMiOlsib3JnLnRyYWNraW5nIl0sImF1ZCI6InVybjpjb25zdW1lciIsImlzcyI6InVybjphcGkiLCJzdWIiOiI1YzM0YmRlODk1NWMyMjAwMTI1N2EzZGUifQ.jbPlYKWz4He79KVkOMeUIQ8EFuqG0trUUvT3_kTp1Lc";
 
 @implementation AppDelegate
 

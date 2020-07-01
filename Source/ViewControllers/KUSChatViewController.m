@@ -149,13 +149,15 @@
     
     UIView *notificationsBanner = (UIView*)[[UINib nibWithNibName:@"PushNotificationsBanner" bundle:[NSBundle bundleForClass:[self class]]] instantiateWithOwner:self options:nil][0];
     [notificationsBanner setFrame:CGRectMake(0, 0, self.view.frame.size.width, notificationBannerHeight)];
-    
-    
     [notificationsBanner setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.view addSubview:notificationsBanner];
     notificationBannerHeightConstraint = [notificationsBanner.heightAnchor constraintEqualToConstant:notificationBannerHeight];
     [notificationBannerHeightConstraint setActive:true];
-    [[notificationsBanner.topAnchor constraintEqualToAnchor:self.view.topAnchor] setActive:true];
+    if (@available(iOS 11.0, *)) {
+        [[notificationsBanner.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor] setActive:true];
+    } else {
+        [[notificationsBanner.topAnchor constraintEqualToAnchor:self.view.topAnchor] setActive:true];
+    }
     [[notificationsBanner.leftAnchor constraintEqualToAnchor:self.view.leftAnchor] setActive:true];
     [[notificationsBanner.rightAnchor constraintEqualToAnchor:self.view.rightAnchor] setActive:true];
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -24,61 +24,54 @@
             <rect key="frame" x="0.0" y="0.0" width="321" height="66"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Never miss a reply" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o8Q-aB-PA1">
-                    <rect key="frame" x="20" y="14" width="126.5" height="19"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="19" id="8jh-F5-0J1"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" name="CircularPro-Medium" family="Circular Pro" pointSize="15"/>
-                    <color key="textColor" red="0.30980392159999998" green="0.33333333329999998" blue="0.36470588240000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enable notifications" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u0q-yv-LHs">
-                    <rect key="frame" x="20" y="33" width="126.5" height="19"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="19" id="GxP-UA-seh"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" name="CircularPro-Book" family="Circular Pro" pointSize="13"/>
-                    <color key="textColor" red="0.30980392159999998" green="0.33333333329999998" blue="0.36470588240000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d9n-B5-yhU">
-                    <rect key="frame" x="217" y="18" width="84" height="30"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="84" id="ji1-Jf-NKG"/>
-                        <constraint firstAttribute="width" secondItem="d9n-B5-yhU" secondAttribute="height" multiplier="28:10" id="qi3-gG-UpH"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" name="MercuryTextG4-Roman" family="Mercury Text G4" pointSize="13"/>
-                    <state key="normal" title="ENABLE">
-                        <color key="titleColor" red="0.30980392159999998" green="0.33333333329999998" blue="0.36470588240000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </state>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                            <real key="value" value="4"/>
-                        </userDefinedRuntimeAttribute>
-                        <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                            <real key="value" value="1"/>
-                        </userDefinedRuntimeAttribute>
-                        <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                            <color key="value" red="0.30980392159999998" green="0.33333333329999998" blue="0.36470588240000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        </userDefinedRuntimeAttribute>
-                    </userDefinedRuntimeAttributes>
-                    <connections>
-                        <action selector="handleEnableNotificationsTapped:" destination="-1" eventType="touchUpInside" id="GRd-hd-87R"/>
-                    </connections>
-                </button>
+                <stackView opaque="NO" contentMode="scaleToFill" spacing="70" translatesAutoresizingMaskIntoConstraints="NO" id="J0r-qV-g5N">
+                    <rect key="frame" x="36.5" y="14" width="248.5" height="38.5"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="ft2-3R-CzG">
+                            <rect key="frame" x="0.0" y="0.0" width="126.5" height="38.5"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Never miss a reply" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o8Q-aB-PA1">
+                                    <rect key="frame" x="0.0" y="0.0" width="126.5" height="19"/>
+                                    <fontDescription key="fontDescription" name="CircularPro-Medium" family="Circular Pro" pointSize="15"/>
+                                    <color key="textColor" red="0.30980392159999998" green="0.33333333329999998" blue="0.36470588240000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enable notifications" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u0q-yv-LHs">
+                                    <rect key="frame" x="0.0" y="22" width="126.5" height="16.5"/>
+                                    <fontDescription key="fontDescription" name="CircularPro-Book" family="Circular Pro" pointSize="13"/>
+                                    <color key="textColor" red="0.30980392159999998" green="0.33333333329999998" blue="0.36470588240000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                        </stackView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d9n-B5-yhU">
+                            <rect key="frame" x="196.5" y="0.0" width="52" height="38.5"/>
+                            <fontDescription key="fontDescription" name="MercuryTextG4-Roman" family="Mercury Text G4" pointSize="13"/>
+                            <state key="normal" title="ENABLE">
+                                <color key="titleColor" red="0.30980392159999998" green="0.33333333329999998" blue="0.36470588240000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                    <real key="value" value="4"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                    <real key="value" value="1"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                    <color key="value" red="0.30980392159999998" green="0.33333333329999998" blue="0.36470588240000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="handleEnableNotificationsTapped:" destination="-1" eventType="touchUpInside" id="GRd-hd-87R"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                </stackView>
             </subviews>
             <color key="backgroundColor" red="1" green="0.82745098039999998" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="d9n-B5-yhU" secondAttribute="trailing" constant="20" id="5vn-bA-K2W"/>
-                <constraint firstItem="u0q-yv-LHs" firstAttribute="trailing" secondItem="o8Q-aB-PA1" secondAttribute="trailing" id="8aJ-gb-Jdq"/>
-                <constraint firstAttribute="bottom" secondItem="u0q-yv-LHs" secondAttribute="bottom" constant="14" id="9if-jQ-d9U"/>
-                <constraint firstItem="o8Q-aB-PA1" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="GMH-yF-3Js"/>
-                <constraint firstItem="u0q-yv-LHs" firstAttribute="top" secondItem="o8Q-aB-PA1" secondAttribute="bottom" id="RvN-cx-MDP"/>
-                <constraint firstItem="o8Q-aB-PA1" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="14" id="ZdA-N2-C3K"/>
-                <constraint firstItem="d9n-B5-yhU" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="o8Q-aB-PA1" secondAttribute="trailing" constant="4" id="iLc-jH-cjt"/>
-                <constraint firstItem="u0q-yv-LHs" firstAttribute="leading" secondItem="o8Q-aB-PA1" secondAttribute="leading" id="l0b-Fp-eGO"/>
-                <constraint firstItem="d9n-B5-yhU" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="txy-wA-IvV"/>
+                <constraint firstItem="J0r-qV-g5N" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="Yno-BI-uGW"/>
+                <constraint firstItem="J0r-qV-g5N" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="fX0-CD-R8m"/>
             </constraints>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
