@@ -58,7 +58,9 @@
 - (CGSize)sizeThatFits:(CGSize)size
 {
     CGSize superSize = [super sizeThatFits:size];
-    superSize.height = 18.0;
+    // Capsule
+    // The toolbar takes up space between our tab bar and the input text field. Reducing its height to 0 to avoid that.
+    superSize.height = 0.0;
     return superSize;
 }
 
