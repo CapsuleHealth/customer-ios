@@ -255,7 +255,7 @@
     // To avoid showing the keyboard when opening the chat tab.
     // Only bring up the keyboard if the chat is being presented/pushed
     //    if (self.isBeingPresented || self.isMovingToParentViewController) {
-    if (self.isBeingPresented) {
+    if (self.isBeingPresented || self.presentingViewController != nil) {
         if (!_inputBarView.hidden && !_showNonBusinessHoursImage) {
             [_inputBarView becomeFirstResponder];
         }
