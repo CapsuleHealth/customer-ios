@@ -159,8 +159,8 @@
         notificationBannerHeight = 66;
         [self.notificationsBanner setHidden:NO];
     }
-    [notificationBannerHeightConstraint setActive:true];
     notificationBannerHeightConstraint = [self.notificationsBanner.heightAnchor constraintEqualToConstant:notificationBannerHeight];
+    [notificationBannerHeightConstraint setActive:true];
 
     self.tableView = [[KUSChatTableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     [self.tableView setTranslatesAutoresizingMaskIntoConstraints:false];
