@@ -61,17 +61,21 @@
 }
 
 - (NSString *) _getSessionsUrl {
+    // Capsule
+    // Deactivating the no history option completely.
+    // We never want to hide the chat history, regardless of the settings in Kustomer dashboard.
+    return @"/c/v1/chat/sessions";
     
-    NSString *url = @"/c/v1/chat/sessions";
-    if (self.userSession.chatSettingsDataSource.didFetch) {
-        
-        KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
-        if(chatSettings.noHistory) {
-            //Only fetch active sessions when no history is enabled
-            url = [NSString stringWithFormat:@"%@?active=true", url];
-        }
-    }
-    return url;
+//    NSString *url = @"/c/v1/chat/sessions";
+//    if (self.userSession.chatSettingsDataSource.didFetch) {
+//
+//        KUSChatSettings *chatSettings = self.userSession.chatSettingsDataSource.object;
+//        if(chatSettings.noHistory) {
+//            //Only fetch active sessions when no history is enabled
+//            url = [NSString stringWithFormat:@"%@?active=true", url];
+//        }
+//    }
+//    return url;
 }
 
 - (Class)modelClass
